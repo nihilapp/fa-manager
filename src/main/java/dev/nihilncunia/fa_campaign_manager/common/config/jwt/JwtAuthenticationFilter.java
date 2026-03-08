@@ -32,6 +32,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                   @NonNull FilterChain filterChain)
     throws ServletException, IOException {
     
+    // 이미 인증된 사용자가 있는 경우 (예: DiscordAuthenticationFilter에서 인증 성공 시) 건너뜀
+    if (SecurityContextHolder.getContext().getAuthentication() != null) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+
     // 1. 요청에서 accessToken 추출
     String accessToken = jwtProvider.resolveToken(request, "accessToken");
     String refreshToken = jwtProvider.resolveToken(request, "refreshToken");

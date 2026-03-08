@@ -48,7 +48,9 @@ public enum RESPONSE_MESSAGE {
   USER_EMAIL_NOT_FOUND("사용자를 찾을 수 없습니다. (email={0})"),
   USER_NAME_CONFLICT("이미 존재하는 이름입니다. (name={0})"),
   USER_EMAIL_CONFLICT("이미 존재하는 이메일입니다. (email={0})"),
-  USER_NAME_IN_USE("이미 사용 중인 이름입니다. 다른 이름을 입력해 주세요.");
+  USER_NAME_IN_USE("이미 사용 중인 이름입니다. 다른 이름을 입력해 주세요."),
+  USER_DISCORD_ID_REQUIRED("디스코드 사용자 ID가 필요합니다."),
+  USER_DISCORD_ID_CONFLICT("이미 등록된 디스코드 ID입니다.");
 
   @JsonValue
   private final String message;

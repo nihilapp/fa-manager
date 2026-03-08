@@ -58,12 +58,76 @@ public final class SearchHelper {
           case EQUALS -> {
             @SuppressWarnings("unchecked")
             Class<Object> valueType = (Class<Object>) value.getClass();
-            SimpleExpression<Object> expr = path.get(targetField, valueType);
-            builder.and(expr.eq(value));
+            builder.and(path.get(targetField, valueType).eq(value));
+          }
+          case NOT_EQUALS -> {
+            @SuppressWarnings("unchecked")
+            Class<Object> valueType = (Class<Object>) value.getClass();
+            builder.and(path.get(targetField, valueType).ne(value));
           }
           case LIKE -> {
             if (value instanceof String str) {
               builder.and(path.getString(targetField).containsIgnoreCase(str.trim()));
+            }
+          }
+          case LEFT_LIKE -> {
+            if (value instanceof String str) {
+              builder.and(path.getString(targetField).startsWithIgnoreCase(str.trim()));
+            }
+          }
+          case RIGHT_LIKE -> {
+            if (value instanceof String str) {
+              builder.and(path.getString(targetField).endsWithIgnoreCase(str.trim()));
+            }
+          }
+          case GREATER_THAN -> {
+            if (value instanceof Comparable cmp) {
+              @SuppressWarnings("unchecked")
+              Class<Comparable> valueType = (Class<Comparable>) cmp.getClass();
+              builder.and(path.getComparable(targetField, valueType).gt(cmp));
+            }
+          }
+          case GREATER_THAN_OR_EQUAL -> {
+            if (value instanceof Comparable cmp) {
+              @SuppressWarnings("unchecked")
+              Class<Comparable> valueType = (Class<Comparable>) cmp.getClass();
+              builder.and(path.getComparable(targetField, valueType).goe(cmp));
+            }
+          }
+          case LESS_THAN -> {
+            if (value instanceof Comparable cmp) {
+              @SuppressWarnings("unchecked")
+              Class<Comparable> valueType = (Class<Comparable>) cmp.getClass();
+              builder.and(path.getComparable(targetField, valueType).lt(cmp));
+            }
+          }
+          case LESS_THAN_OR_EQUAL -> {
+            if (value instanceof Comparable cmp) {
+              @SuppressWarnings("unchecked")
+              Class<Comparable> valueType = (Class<Comparable>) cmp.getClass();
+              builder.and(path.getComparable(targetField, valueType).loe(cmp));
+            }
+          }
+          case IN -> {
+            if (value instanceof java.util.Collection<?> col && !col.isEmpty()) {
+              builder.and(path.get(targetField).in(col));
+            }
+          }
+          case IS_NULL -> {
+            builder.and(path.get(targetField).isNull());
+          }
+          case IS_NOT_NULL -> {
+            builder.and(path.get(targetField).isNotNull());
+          }
+          case BETWEEN -> {
+            if (value instanceof java.util.List<?> list && list.size() == 2) {
+              Object v1 = list.get(0);
+              Object v2 = list.get(1);
+              if (v1 instanceof Comparable c1 && v2 instanceof Comparable c2) {
+                @SuppressWarnings("unchecked")
+                Class<Comparable> valueType = (Class<Comparable>) c1.getClass();
+                builder.and(path.getComparable(targetField, valueType).between(c1, c2));
+              }
             }
           }
         }

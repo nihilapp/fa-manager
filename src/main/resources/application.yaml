@@ -19,7 +19,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update # 개발 단계에서는 update, 운영은 none 또는 validate
+      ddl-auto: create # 개발 단계에서는 update, 운영은 none 또는 validate
     show-sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
@@ -52,7 +52,7 @@ jwt:
 
 app:
   security:
-    use-discord: false
+    use-discord: true
 
 logging:
   level:

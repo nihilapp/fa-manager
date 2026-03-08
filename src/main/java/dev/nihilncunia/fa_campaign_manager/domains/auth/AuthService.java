@@ -1,7 +1,7 @@
 package dev.nihilncunia.fa_campaign_manager.domains.auth;
 
-import dev.nihilncunia.fa_campaign_manager.domains.users.UserInDto;
-import dev.nihilncunia.fa_campaign_manager.domains.users.UserOutDto;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserInDto;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserOutDto;
 
 public interface AuthService {
   UserOutDto signIn(UserInDto userInDto);

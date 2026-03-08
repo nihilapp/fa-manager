@@ -24,7 +24,6 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
   private final UserMapper userMapper;
   private final PasswordEncoder passwordEncoder;
-  private final Optional<UserDiscordRepository> userDiscordRepository;
 
   @Value("${app.security.use-discord:false}")
   private boolean useDiscord;
@@ -32,27 +31,28 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public UserOutDto createUser(UserInDto userInDto) {
-    // 1. 중복 확인
+    // 1. 디스코드 필수 체크 (설정 활성화 시)
+    if (useDiscord && (userInDto.getDiscordId() == null || userInDto.getDiscordId().isBlank())) {
+      throw new CustomException(RESPONSE_CODE.BAD_REQUEST, RESPONSE_MESSAGE.USER_DISCORD_ID_REQUIRED);
+    }
+
+    // 2. 중복 확인
     if (userRepository.findByEmail(userInDto.getEmail()).isPresent()) {
       throw new CustomException(RESPONSE_CODE.BAD_REQUEST, RESPONSE_MESSAGE.USER_EMAIL_CONFLICT);
     }
+    
+    if (userInDto.getDiscordId() != null && userRepository.findByDiscordId(userInDto.getDiscordId()).isPresent()) {
+      throw new CustomException(RESPONSE_CODE.BAD_REQUEST, RESPONSE_MESSAGE.USER_DISCORD_ID_CONFLICT);
+    }
 
-    // 2. 엔티티 변환 및 비밀번호 암호화
+    // 3. 엔티티 변환 및 비밀번호 암호화
     UserEntity userEntity = userMapper.toEntity(userInDto);
     userEntity.setPassword(passwordEncoder.encode(userInDto.getRawPassword()));
     userEntity.setRole(USER_ROLE.ROLE_USER);
+    userEntity.setDiscordId(userInDto.getDiscordId());
 
-    // 3. 저장
+    // 4. 저장
     UserEntity savedUser = userRepository.save(userEntity);
-
-    // 4. 디스코드 정보 연동 (설정 활성화 시)
-    if (useDiscord && userInDto.getDiscordId() != null && userDiscordRepository.isPresent()) {
-      UserDiscordEntity discordEntity = UserDiscordEntity.builder()
-          .user(savedUser)
-          .discordId(userInDto.getDiscordId())
-          .build();
-      userDiscordRepository.get().save(discordEntity);
-    }
 
     return userMapper.toDto(savedUser);
   }

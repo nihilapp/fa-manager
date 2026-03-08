@@ -3,6 +3,9 @@ package dev.nihilncunia.fa_campaign_manager.domains.users;
 import dev.nihilncunia.fa_campaign_manager.common.constant.USER_ROLE;
 import dev.nihilncunia.fa_campaign_manager.common.constant.YN_CODE;
 import dev.nihilncunia.fa_campaign_manager.common.entity.CommonEntity;
+import dev.nihilncunia.fa_campaign_manager.domains.campaigns.CampaignMemberEntity;
+import dev.nihilncunia.fa_campaign_manager.domains.characters.CharacterEntity;
+import dev.nihilncunia.fa_campaign_manager.domains.sessions.SessionPlayerEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -12,6 +15,8 @@ import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuperBuilder
 @Getter
@@ -23,7 +28,9 @@ import java.time.OffsetDateTime;
 @Table(
   name = "users",
   indexes = {
-    @Index(name = "idx_users_email", columnList = "email", unique = true)
+    @Index(name = "idx_users_email", columnList = "email", unique = true),
+    @Index(name = "idx_users_name", columnList = "name"),
+    @Index(name = "idx_users_discord_id", columnList = "discordId")
   },
   uniqueConstraints = {}
 )
@@ -34,25 +41,27 @@ public class UserEntity extends CommonEntity {
   @Schema(description = "사용자 이름", example = "NIHILncunia")
   private String name;
 
-  @Column(nullable = false, length = 100)
+  @Column(nullable = false, length = 100, unique = true)
   @Email(message = "이메일 형식이 올바르지 않습니다.")
-  @Schema(description = "사용자 이메일", example = "example@example.com")
+  @Schema(description = "사용자 이메일 (로그인 ID 겸용)", example = "example@example.com")
   private String email;
 
-  @Column(nullable = false)
-  @Schema(description = "사용자 비밀번호")
+  @Column(nullable = false, length = 255)
+  @Schema(description = "사용자 비밀번호 (암호화된 문자열)")
   private String password;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
-  @Schema(description = "사용자 권한", example = "ROLE_USER")
+  @Schema(description = "사용자 시스템 권한", example = "ROLE_USER")
   private USER_ROLE role;
   
   @Column(nullable = true, length = 1000)
-  @Schema(description = "사용자 리프레시 토큰", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
+  @Schema(description = "사용자 리프레시 토큰")
   private String refreshToken;
   
-  @Column(nullable = true, length = 1000)
+  @Builder.Default
+  @Column(nullable = false)
+  @Schema(description = "로그인 실패 횟수", example = "0")
   private Integer loginFailureCount = 0;
   
   @Builder.Default
@@ -62,10 +71,29 @@ public class UserEntity extends CommonEntity {
   private YN_CODE lockYn = YN_CODE.N;
   
   @Column(nullable = true)
-  @Schema(description = "사용자 마지막 로그인 날짜", example = "2026-03-07T10:00:00.000+09:00")
+  @Schema(description = "사용자 마지막 로그인 날짜")
   private OffsetDateTime lastSignInDate;
   
   @Column(nullable = true)
-  @Schema(description = "사용자 마지막 비밀번호 변경 날짜", example = "2026-03-07T10:00:00.000+09:00")
+  @Schema(description = "사용자 마지막 비밀번호 변경 날짜")
   private OffsetDateTime lastPasswordChangeDate;
+
+  @Column(nullable = true, length = 100, unique = true)
+  @Schema(description = "디스코드 사용자 고유 ID", example = "123456789012345678")
+  private String discordId;
+
+  @Builder.Default
+  @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  @Schema(description = "보유 캐릭터 목록")
+  private List<CharacterEntity> characters = new ArrayList<>();
+
+  @Builder.Default
+  @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  @Schema(description = "참여 캠페인 목록")
+  private List<CampaignMemberEntity> campaignMembers = new ArrayList<>();
+
+  @Builder.Default
+  @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  @Schema(description = "세션 참여 기록")
+  private List<SessionPlayerEntity> sessionParticipations = new ArrayList<>();
 }
