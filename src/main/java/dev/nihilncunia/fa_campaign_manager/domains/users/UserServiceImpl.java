@@ -50,7 +50,11 @@ public class UserServiceImpl implements UserService {
     // 3. 엔티티 변환 및 비밀번호 암호화
     UserEntity userEntity = userMapper.toEntity(userInDto);
     userEntity.setPassword(passwordEncoder.encode(userInDto.getRawPassword()));
-    userEntity.setRole(USER_ROLE.ROLE_USER);
+    
+    // 역할 설정: 입력값이 있으면 해당 역할을 사용하고, 없으면 ROLE_USER를 기본값으로 설정
+    USER_ROLE userRole = (userInDto.getRole() != null) ? userInDto.getRole() : USER_ROLE.ROLE_USER;
+    userEntity.setRole(userRole);
+    
     userEntity.setDiscordId(userInDto.getDiscordId());
 
     // 4. 저장
@@ -76,8 +80,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public ListOutDto<UserOutDto> getUserList(UserInDto searchDto) {
-    return userRepository.findAll(searchDto);
+  public ListOutDto<UserOutDto> getUserList(UserInDto userInDto) {
+    return userRepository.findAll(userInDto);
   }
 
   @Override

@@ -69,6 +69,23 @@ public class CommonEntity {
   @Schema(description = "삭제일시", example = "2026-03-07T10:00:00.000+09:00")
   private OffsetDateTime deleteDate;
 
+  /**
+   * 엔티티 소프트 삭제(Soft Delete) 처리
+   * 실제 DB에서 레코드를 삭제(Hard Delete)하지 않고, 플래그를 변경하여 논리적으로 삭제된 것으로 간주합니다.
+   * 이렇게 하면 데이터 복구가 쉽고, 삭제된 데이터와 연관된 이력을 추적할 수 있는 장점이 있습니다.
+   *
+   * @param deleterId 삭제를 수행한 사용자 ID (누가 삭제했는지 기록하여 보안 및 추적 용도로 사용)
+   */
+  public void delete(Long deleterId) {
+    // 사용 여부를 'N'으로 변경: 애플리케이션의 일반적인 조회 로직에서 제외하기 위함
+    this.useYn = YN_CODE.N;
+    // 삭제 여부를 'Y'로 변경: @SQLRestriction("delete_yn = 'N'") 설정이 있는 엔티티는 쿼리 시 자동으로 걸러짐
+    this.deleteYn = YN_CODE.Y;
+    // 삭제 주체와 시간을 기록하여 '언제, 누가' 삭제했는지 아카이빙
+    this.deleterId = deleterId;
+    this.deleteDate = OffsetDateTime.now();
+  }
+
   @PrePersist
   protected void onPrePersist() {
     if (this.useYn == null)
