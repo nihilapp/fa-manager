@@ -5,6 +5,7 @@ import dev.nihilncunia.fa_campaign_manager.common.constant.YN_CODE;
 import dev.nihilncunia.fa_campaign_manager.common.entity.CommonEntity;
 import dev.nihilncunia.fa_campaign_manager.domains.campaigns.CampaignMemberEntity;
 import dev.nihilncunia.fa_campaign_manager.domains.characters.CharacterEntity;
+import dev.nihilncunia.fa_campaign_manager.domains.docs.DocEntity;
 import dev.nihilncunia.fa_campaign_manager.domains.sessions.SessionPlayerEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -96,4 +97,9 @@ public class UserEntity extends CommonEntity {
   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
   @Schema(description = "세션 참여 기록")
   private List<SessionPlayerEntity> sessionParticipations = new ArrayList<>();
+
+  @Builder.Default
+  @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  @Schema(description = "작성한 세계관 문서 목록")
+  private List<DocEntity> docs = new ArrayList<>();
 }

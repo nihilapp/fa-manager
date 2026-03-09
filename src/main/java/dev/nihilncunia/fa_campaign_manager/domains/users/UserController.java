@@ -6,6 +6,8 @@ import dev.nihilncunia.fa_campaign_manager.common.constant.RESPONSE_CODE;
 import dev.nihilncunia.fa_campaign_manager.common.constant.RESPONSE_MESSAGE;
 import dev.nihilncunia.fa_campaign_manager.common.response.BaseResponse;
 import dev.nihilncunia.fa_campaign_manager.common.validation.ValidationGroups;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserInDto;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserOutDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

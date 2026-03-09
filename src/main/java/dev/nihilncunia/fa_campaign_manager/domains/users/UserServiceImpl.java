@@ -6,6 +6,8 @@ import dev.nihilncunia.fa_campaign_manager.common.constant.USER_ROLE;
 import dev.nihilncunia.fa_campaign_manager.common.constant.YN_CODE;
 import dev.nihilncunia.fa_campaign_manager.common.exception.CustomException;
 import dev.nihilncunia.fa_campaign_manager.common.security.CurrentUserProvider;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserInDto;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserOutDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import dev.nihilncunia.fa_campaign_manager.common.dto.ListOutDto;

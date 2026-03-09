@@ -4,7 +4,10 @@ import dev.nihilncunia.fa_campaign_manager.common.constant.RESPONSE_CODE;
 import dev.nihilncunia.fa_campaign_manager.common.exception.CustomException;
 import dev.nihilncunia.fa_campaign_manager.common.helper.JwtProvider;
 import dev.nihilncunia.fa_campaign_manager.common.security.CurrentUserProvider;
+import dev.nihilncunia.fa_campaign_manager.domains.auth.dto.TokenInfoDto;
 import dev.nihilncunia.fa_campaign_manager.domains.users.*;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserInDto;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserOutDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -58,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   @Transactional
-  public java.util.Map<String, String> refreshToken(String refreshToken) {
+  public TokenInfoDto refreshToken(String refreshToken) {
     if (!jwtProvider.validateToken(refreshToken, true)) {
       throw new CustomException(RESPONSE_CODE.UNAUTHORIZED, "유효하지 않은 리프레시 토큰입니다.");
     }
@@ -79,10 +82,11 @@ public class AuthServiceImpl implements AuthService {
 
     // DB 업데이트
     userEntity.setRefreshToken(newRefreshToken);
-
-    return java.util.Map.of(
-        "accessToken", newAccessToken,
-        "refreshToken", newRefreshToken);
+    
+    return TokenInfoDto.builder()
+      .accessToken(newAccessToken)
+      .refreshToken(newRefreshToken)
+      .build();
   }
 
   @Override

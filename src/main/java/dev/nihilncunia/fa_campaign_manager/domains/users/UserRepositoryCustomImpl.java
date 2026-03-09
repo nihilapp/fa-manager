@@ -6,6 +6,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import dev.nihilncunia.fa_campaign_manager.common.dto.ListOutDto;
 import dev.nihilncunia.fa_campaign_manager.common.helper.SearchHelper;
 import dev.nihilncunia.fa_campaign_manager.common.repository.CustomRepositorySupport;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserInDto;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserOutDto;
 
 public class UserRepositoryCustomImpl extends CustomRepositorySupport implements UserRepositoryCustom {
 
