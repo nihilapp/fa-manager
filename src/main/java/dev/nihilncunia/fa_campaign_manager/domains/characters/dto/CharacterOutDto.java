@@ -6,15 +6,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Schema(description = "캐릭터 출력 DTO")
 public class CharacterOutDto extends CommonOutDto {
 
@@ -30,139 +29,30 @@ public class CharacterOutDto extends CommonOutDto {
   @Schema(description = "시작 레벨")
   private Integer startLevel;
 
-  @Schema(description = "현재 레벨")
-  private Integer currentLevel;
-
   @Schema(description = "시작 경험치")
   private Integer startExp;
+
+  @Schema(description = "시작 소지 자금")
+  private CharacterCurrencyDto startCurrency;
+
+  @Schema(description = "현재 레벨")
+  private Integer currentLevel;
 
   @Schema(description = "현재 경험치")
   private Integer currentExp;
 
-  @Schema(description = "시작 소지 자금")
-  private Integer startCurrency;
-
-  @Schema(description = "주무장")
-  private String mainHand;
-
-  @Schema(description = "보조무장")
-  private String offHand;
-
-  @Schema(description = "갑옷")
-  private String armor;
-
-  @Schema(description = "머리")
-  private String head;
-
-  @Schema(description = "장갑")
-  private String gauntlet;
-
-  @Schema(description = "부츠")
-  private String boots;
-
-  @Schema(description = "벨트")
-  private String belt;
-
-  @Schema(description = "망토")
-  private String cloak;
-
-  @Schema(description = "기타 장비 1")
-  private String accessory1;
-
-  @Schema(description = "기타 장비 2")
-  private String accessory2;
-
-  @Schema(description = "기타 장비 3")
-  private String accessory3;
-
-  @Schema(description = "기타 장비 4")
-  private String accessory4;
-
-  @Schema(description = "힘/민첩 8제한 (벨트/전낭)")
-  private String reqStrDex8;
-
-  @Schema(description = "힘/민첩 10제한 (벨트/전낭)")
-  private String reqStrDex10;
-
-  @Schema(description = "힘/민첩 12제한 (벨트/전낭)")
-  private String reqStrDex12;
-
-  @Schema(description = "힘/민첩 14제한 (벨트/전낭)")
-  private String reqStrDex14;
-
-  @Schema(description = "힘 16 제한 (벨트/전낭)")
-  private String reqStr16;
-
-  @Schema(description = "힘 18 제한 (벨트/전낭)")
-  private String reqStr18;
-
-  @Schema(description = "힘 20 제한 (벨트/전낭)")
-  private String reqStr20;
-
-  @Schema(description = "건강 8 제한 (배낭/탈것)")
-  private String reqCon8;
-
-  @Schema(description = "건강 10 제한 (배낭/탈것)")
-  private String reqCon10;
-
-  @Schema(description = "건강 12 제한 (배낭/탈것)")
-  private String reqCon12;
-
-  @Schema(description = "건강 14 제한 (배낭/탈것)")
-  private String reqCon14;
-
-  @Schema(description = "건강 16 제한 (배낭/탈것)")
-  private String reqCon16;
-
-  @Schema(description = "건강 18 제한 (배낭/탈것)")
-  private String reqCon18;
-
-  @Schema(description = "건강 20 제한 (배낭/탈것)")
-  private String reqCon20;
-
   @Schema(description = "현재 소지 자금")
-  private Integer currentCurrency;
+  private CharacterCurrencyDto currentCurrency;
 
-  @Schema(description = "소속 캠페인 정보")
-  private CampaignInfo campaignInfo;
+  @Schema(description = "장비 정보")
+  private CharacterEquipmentDto equipment;
 
-  @Schema(description = "소유자 유저 정보")
-  private UserInfo userInfo;
+  @Schema(description = "힘/민첩 제한 아이템 정보")
+  private CharacterRequirementStrDexDto requirementStrDex;
 
-  @Schema(description = "클래스 목록")
-  private List<CharacterClassList> characterClassList;
+  @Schema(description = "건강 제한 아이템 정보")
+  private CharacterRequirementConDto requirementCon;
 
-  @Schema(description = "세션 참여 이력")
-  private List<SessionHistoryList> sessionHistoryList;
-
-  @Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
-  public static class CharacterClassList {
-    private String className;
-    private String subClass;
-    private Integer level;
-  }
-
-  @Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
-  public static class CampaignInfo {
-    private Long id;
-    private String name;
-    private String status;
-  }
-
-  @Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
-  public static class UserInfo {
-    private Long id;
-    private String name;
-    private String email;
-  }
-
-  @Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
-  public static class SessionHistoryList {
-    private Long sessionId;
-    private String sessionName;
-    private Integer sessionNo;
-    private OffsetDateTime playDate;
-    private Integer earnedExp;
-    private Integer earnedGold;
-  }
+  @Schema(description = "클래스 정보 목록")
+  private List<CharacterClassDto> classes;
 }

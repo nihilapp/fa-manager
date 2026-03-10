@@ -3,6 +3,9 @@ package dev.nihilncunia.fa_campaign_manager.common.config.swagger;
 import dev.nihilncunia.fa_campaign_manager.common.annotation.ApiExampleExclude;
 import dev.nihilncunia.fa_campaign_manager.common.response.BaseResponse;
 import dev.nihilncunia.fa_campaign_manager.domains.health.HealthExample;
+import dev.nihilncunia.fa_campaign_manager.domains.users.UserExample;
+import dev.nihilncunia.fa_campaign_manager.domains.auth.AuthExample;
+import dev.nihilncunia.fa_campaign_manager.domains.campaigns.CampaignExample;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.examples.Example;
@@ -28,6 +31,9 @@ public class CommonSwaggerConfig {
 
   private final SwaggerExample swaggerExample;
   private final HealthExample healthExample;
+  private final UserExample userExample;
+  private final AuthExample authExample;
+  private final CampaignExample campaignExample;
 
   /**
    * 메인 API 그룹을 생성합니다.
@@ -39,6 +45,7 @@ public class CommonSwaggerConfig {
       .group("Main API")
       .pathsToMatch("/**")
       .addOpenApiCustomizer(openApiCustomizer())
+      .addOperationCustomizer(operationCustomizer()) // 명시적 추가
       .build();
   }
 
@@ -60,14 +67,18 @@ public class CommonSwaggerConfig {
                   창작자들을 위한 통합 창작 지원 서비스입니다.
 
                   **인증 안내**: `/auth/sign-in` API를 통해 로그인하면 쿠키가 자동 설정되며,\
-                   이후 API 호출 시 인증이 자동으로 적용됩니다.""")
+                  이후 API 호출 시 인증이 자동으로 적용됩니다.""")
           .version("v1.0.0"));
 
       // 태그 설정
-      Tag healthTag = new Tag().name("Health").description("시스템 상태 API");
-      Tag userTag = new Tag().name("User").description("사용자 관리 API");
-      Tag authTag = new Tag().name("Auth").description("인증 관련 API");
-      openApi.setTags(List.of(healthTag, userTag, authTag));
+      Tag healthTag = new Tag().name("시스템 상태").description("시스템 상태 API");
+      Tag userTag = new Tag().name("사용자 관리").description("사용자 관리 API");
+      Tag authTag = new Tag().name("인증 관리").description("인증 관리 API");
+      Tag campaignTag = new Tag().name("캠페인 관리").description("캠페인 관리 API");
+      Tag characterTag = new Tag().name("캐릭터 관리").description("캐릭터 관리 API");
+      Tag sessionTag = new Tag().name("세션 관리").description("세션 관리 API");
+      
+      openApi.setTags(List.of(healthTag, userTag, authTag, campaignTag, characterTag, sessionTag));
 
       // 1. 공통 스키마 등록
       ModelConverters.getInstance().read(BaseResponse.class).forEach(components::addSchemas);
@@ -90,7 +101,38 @@ public class CommonSwaggerConfig {
       components.addExamples("healthSuccess", new Example().value(healthExample.healthSuccess()));
       components.addExamples("healthFail", new Example().value(healthExample.healthFail()));
 
-      // 5. 사용자 관련 예시 (UserDataExample)
+      // 5. 사용자 관련 예시 (UserExample)
+      components.addExamples("userCreateSuccess", new Example().value(userExample.userCreateSuccess()));
+      components.addExamples("userGetDetailSuccess", new Example().value(userExample.userGetDetailSuccess()));
+      components.addExamples("userGetListSuccess", new Example().value(userExample.userGetListSuccess()));
+      components.addExamples("userUpdateSuccess", new Example().value(userExample.userUpdateSuccess()));
+      components.addExamples("userDeleteSuccess", new Example().value(userExample.userDeleteSuccess()));
+      components.addExamples("userNotFound", new Example().value(userExample.userNotFound()));
+      components.addExamples("userEmailConflict", new Example().value(userExample.emailConflict()));
+      components.addExamples("userDiscordIdConflict", new Example().value(userExample.discordIdConflict()));
+      components.addExamples("userDiscordIdRequired", new Example().value(userExample.discordIdRequired()));
+
+      // 6. 인증 관련 상세 예시 (AuthExample)
+      components.addExamples("authSignInSuccess", new Example().value(authExample.authSignInSuccess()));
+      components.addExamples("authSignOutSuccess", new Example().value(authExample.authSignOutSuccess()));
+      components.addExamples("authRefreshSuccess", new Example().value(authExample.authRefreshSuccess()));
+      components.addExamples("authFailInvalidCredentials", new Example().value(authExample.authFailInvalidCredentials()));
+      components.addExamples("authFailInvalidToken", new Example().value(authExample.authFailInvalidToken()));
+      components.addExamples("authFailTokenMismatch", new Example().value(authExample.authFailTokenMismatch()));
+      components.addExamples("authFailPasswordMismatch", new Example().value(authExample.authFailPasswordMismatch()));
+
+      // 7. 캠페인 관련 상세 예시 (CampaignExample)
+      components.addExamples("campaignGetListSuccess", new Example().value(campaignExample.campaignGetListSuccess()));
+      components.addExamples("campaignGetDetailSuccess", new Example().value(campaignExample.campaignGetDetailSuccess()));
+      components.addExamples("campaignCreateSuccess", new Example().value(campaignExample.campaignCreateSuccess()));
+      components.addExamples("campaignUpdateSuccess", new Example().value(campaignExample.campaignUpdateSuccess()));
+      components.addExamples("campaignDeleteSuccess", new Example().value(campaignExample.campaignDeleteSuccess()));
+      components.addExamples("campaignMemberAddSuccess", new Example().value(campaignExample.campaignMemberAddSuccess()));
+      components.addExamples("campaignCharacterAddSuccess", new Example().value(campaignExample.campaignCharacterAddSuccess()));
+      components.addExamples("campaignNotFound", new Example().value(campaignExample.campaignNotFound()));
+      components.addExamples("campaignNameConflict", new Example().value(campaignExample.campaignNameConflict()));
+      components.addExamples("campaignMemberConflict", new Example().value(campaignExample.campaignMemberConflict()));
+      components.addExamples("campaignCharacterConflict", new Example().value(campaignExample.campaignCharacterConflict()));
     };
   }
 
@@ -102,28 +144,34 @@ public class CommonSwaggerConfig {
   public OperationCustomizer operationCustomizer() {
     return (operation, handlerMethod) -> {
       ApiResponses responses = operation.getResponses();
-      ApiResponse okResponse = responses.computeIfAbsent("200", key -> new ApiResponse().description("성공"));
-      
-      if (okResponse.getContent() == null) okResponse.setContent(new Content());
-      Content content = okResponse.getContent();
-      
-      MediaType mediaType = Optional.ofNullable(content.get("application/json")).orElseGet(MediaType::new);
-      if (mediaType.getExamples() == null) mediaType.setExamples(new java.util.LinkedHashMap<>());
-      
-      // 전역 공통 에러 응답 주입 (refs)
-      mediaType.addExamples("잘못된 요청", new Example().$ref("#/components/examples/badRequest"));
-      mediaType.addExamples("인증 실패", new Example().$ref("#/components/examples/unauthorized"));
-      mediaType.addExamples("권한 부족", new Example().$ref("#/components/examples/forbidden"));
-      mediaType.addExamples("서비스 에러", new Example().$ref("#/components/examples/internal_error"));
-      
-      content.put("application/json", mediaType);
 
-      ApiExampleExclude excludeAnnotation = handlerMethod.getMethodAnnotation(ApiExampleExclude.class);
-      if (excludeAnnotation != null) {
-        for (String key : excludeAnnotation.keys()) {
-          mediaType.getExamples().remove(key);
-        }
-      }
+      // 성공 응답(2xx) 코드들을 찾아 공통 에러 예시 주입
+      responses.entrySet().stream()
+        .filter(entry -> entry.getKey().startsWith("2"))
+        .forEach(entry -> {
+          ApiResponse okResponse = entry.getValue();
+          if (okResponse.getContent() == null) okResponse.setContent(new Content());
+          Content content = okResponse.getContent();
+
+          MediaType mediaType = Optional.ofNullable(content.get("application/json")).orElseGet(MediaType::new);
+          if (mediaType.getExamples() == null) mediaType.setExamples(new java.util.LinkedHashMap<>());
+
+          // 전역 공통 에러 응답 주입 (refs)
+          mediaType.addExamples("잘못된 요청", new Example().$ref("#/components/examples/badRequest"));
+          mediaType.addExamples("인증 실패", new Example().$ref("#/components/examples/unauthorized"));
+          mediaType.addExamples("권한 부족", new Example().$ref("#/components/examples/forbidden"));
+          mediaType.addExamples("서비스 에러", new Example().$ref("#/components/examples/internal_error"));
+
+          content.put("application/json", mediaType);
+
+          // ApiExampleExclude 처리
+          ApiExampleExclude excludeAnnotation = handlerMethod.getMethodAnnotation(ApiExampleExclude.class);
+          if (excludeAnnotation != null) {
+            for (String key : excludeAnnotation.keys()) {
+              mediaType.getExamples().remove(key);
+            }
+          }
+        });
 
       return operation;
     };

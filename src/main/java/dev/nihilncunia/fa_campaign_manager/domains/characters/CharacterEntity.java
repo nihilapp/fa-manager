@@ -32,6 +32,7 @@ import java.util.List;
 )
 @SQLRestriction(value = "delete_yn = 'N'")
 public class CharacterEntity extends CommonEntity {
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_characters_users"))
   @Schema(description = "소유자 유저 정보")
@@ -65,115 +66,28 @@ public class CharacterEntity extends CommonEntity {
   @Schema(description = "시작 경험치", example = "0")
   private Integer startExp = 0;
 
-  @Builder.Default
-  @Column(nullable = false)
-  @Schema(description = "시작 소지 자금", example = "100")
-  private Integer startCurrency = 0;
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "copper", column = @Column(name = "start_currency_cp")),
+    @AttributeOverride(name = "silver", column = @Column(name = "start_currency_sp")),
+    @AttributeOverride(name = "electrum", column = @Column(name = "start_currency_ep")),
+    @AttributeOverride(name = "gold", column = @Column(name = "start_currency_gp")),
+    @AttributeOverride(name = "platinum", column = @Column(name = "start_currency_pp"))
+  })
+  @Schema(description = "시작 소지 자금")
+  private CharacterCurrency startCurrency;
 
-  @Column(length = 100)
-  @Schema(description = "주무장", example = "장검")
-  private String mainHand;
+  @Embedded
+  @Schema(description = "장비 정보")
+  private CharacterEquipment equipment;
 
-  @Column(length = 100)
-  @Schema(description = "보조무장", example = "목재 방패")
-  private String offHand;
+  @Embedded
+  @Schema(description = "힘/민첩 제한 아이템 정보")
+  private CharacterRequirementStrDex requirementStrDex;
 
-  @Column(length = 100)
-  @Schema(description = "갑옷", example = "가죽 갑옷")
-  private String armor;
-
-  @Column(length = 100)
-  @Schema(description = "머리", example = "철 투구")
-  private String head;
-
-  @Column(length = 100)
-  @Schema(description = "장갑", example = "가죽 장갑")
-  private String gauntlet;
-
-  @Column(length = 100)
-  @Schema(description = "부츠", example = "가죽 부츠")
-  private String boots;
-
-  @Column(length = 100)
-  @Schema(description = "벨트", example = "가죽 벨트")
-  private String belt;
-
-  @Column(length = 100)
-  @Schema(description = "망토", example = "여행자의 망토")
-  private String cloak;
-
-  @Column(length = 100)
-  @Schema(description = "기타 장비 1", example = "은반지")
-  private String accessory1;
-
-  @Column(length = 100)
-  @Schema(description = "기타 장비 2")
-  private String accessory2;
-
-  @Column(length = 100)
-  @Schema(description = "기타 장비 3")
-  private String accessory3;
-
-  @Column(length = 100)
-  @Schema(description = "기타 장비 4")
-  private String accessory4;
-
-  @Column(length = 100)
-  @Schema(description = "힘/민첩 8제한 (벨트/전낭)")
-  private String reqStrDex8;
-
-  @Column(length = 100)
-  @Schema(description = "힘/민첩 10제한 (벨트/전낭)")
-  private String reqStrDex10;
-
-  @Column(length = 100)
-  @Schema(description = "힘/민첩 12제한 (벨트/전낭)")
-  private String reqStrDex12;
-
-  @Column(length = 100)
-  @Schema(description = "힘/민첩 14제한 (벨트/전낭)")
-  private String reqStrDex14;
-
-  @Column(length = 100)
-  @Schema(description = "힘 16 제한 (벨트/전낭)")
-  private String reqStr16;
-
-  @Column(length = 100)
-  @Schema(description = "힘 18 제한 (벨트/전낭)")
-  private String reqStr18;
-
-  @Column(length = 100)
-  @Schema(description = "힘 20 제한 (벨트/전낭)")
-  private String reqStr20;
-
-  @Column(length = 100)
-  @Schema(description = "건강 8 제한 (배낭/탈것)")
-  private String reqCon8;
-
-  @Column(length = 100)
-  @Schema(description = "건강 10 제한 (배낭/탈것)")
-  private String reqCon10;
-
-  @Column(length = 100)
-  @Schema(description = "건강 12 제한 (배낭/탈것)")
-  private String reqCon12;
-
-  @Column(length = 100)
-  @Schema(description = "건강 14 제한 (배낭/탈것)")
-  private String reqCon14;
-
-  @Column(length = 100)
-  @Schema(description = "건강 16 제한 (배낭/탈것)")
-  private String reqCon16;
-
-  @Column(length = 100)
-  @Schema(description = "건강 18 제한 (배낭/탈것)")
-  private String reqCon18;
-
-  @Column(length = 100)
-  @Schema(description = "건강 20 제한 (배낭/탈것)")
-  private String reqCon20;
-
+  @Embedded
+  @Schema(description = "건강 제한 아이템 정보")
+  private CharacterRequirementCon requirementCon;
 
   @Builder.Default
   @ElementCollection
@@ -190,4 +104,3 @@ public class CharacterEntity extends CommonEntity {
   @Schema(description = "세션 참여 기록")
   private List<SessionPlayerEntity> sessionParticipations = new ArrayList<>();
 }
-

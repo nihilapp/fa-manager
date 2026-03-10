@@ -2,21 +2,20 @@ package dev.nihilncunia.fa_campaign_manager.domains.sessions.dto;
 
 import dev.nihilncunia.fa_campaign_manager.common.constant.SESSION_ROLE;
 import dev.nihilncunia.fa_campaign_manager.common.constant.STATUS_CODE;
-import dev.nihilncunia.fa_campaign_manager.common.dto.CommonOutDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
 
 @Getter
 @Setter
-@ToString
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(description = "세션 출력 DTO")
-public class SessionOutDto extends CommonOutDto {
+@Schema(description = "세션 관계 정보 DTO (관계 컬럼 제외)")
+public class SessionRelationDto {
+  @Schema(description = "세션 ID")
+  private Long id;
   
   @Schema(description = "세션 번호")
   private Integer no;

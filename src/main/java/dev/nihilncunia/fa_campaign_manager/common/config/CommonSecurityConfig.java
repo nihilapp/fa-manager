@@ -100,10 +100,9 @@ public class CommonSecurityConfig {
       new JwtAuthenticationFilter(jwtProvider, userDetailsService);
 
     // loadByDiscordId를 위해 커스텀 서비스로 변환
-    AppUserDetailsService appUserDetailsService = (AppUserDetailsService) userDetailsService;
     
     DiscordAuthenticationFilter discordAuthenticationFilter =
-      new DiscordAuthenticationFilter(appUserDetailsService, useDiscord);
+      new DiscordAuthenticationFilter((AppUserDetailsService) userDetailsService, useDiscord);
 
     http
       .csrf(AbstractHttpConfigurer::disable)

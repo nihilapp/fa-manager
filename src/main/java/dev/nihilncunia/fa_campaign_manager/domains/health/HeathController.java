@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/health")
 @RequiredArgsConstructor
-@Tag(name = "00. 시스템 상태", description = "서버 활성화 상태를 확인하기 위한 API")
+@Tag(name = "시스템 상태")
 public class HeathController {
   private final HealthService healthService;
   

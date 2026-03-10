@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-03-08T14:48:31.127Z",
+  "lastUpdated": "2026-03-10T19:42:33.794Z",
   "activeFeatures": [],
   "primaryFeature": null,
   "features": {},
@@ -10,10 +10,8 @@
     "phaseHistory": []
   },
   "session": {
-    "startedAt": "2026-03-09T18:55:30.475Z",
+    "startedAt": "2026-03-10T10:14:09.454Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-03-09T18:55:30.475Z"
-  },
-  "_snapshotTimestamp": "2026-03-09T19:33:18.646Z",
-  "_reason": "pre-compress"
+    "lastActivity": "2026-03-10T10:14:09.454Z"
+  }
 }

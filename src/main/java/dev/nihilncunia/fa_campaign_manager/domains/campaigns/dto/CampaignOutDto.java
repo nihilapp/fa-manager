@@ -2,6 +2,9 @@ package dev.nihilncunia.fa_campaign_manager.domains.campaigns.dto;
 
 import dev.nihilncunia.fa_campaign_manager.common.constant.STATUS_CODE;
 import dev.nihilncunia.fa_campaign_manager.common.dto.CommonOutDto;
+import dev.nihilncunia.fa_campaign_manager.domains.characters.dto.CharacterOutDto;
+import dev.nihilncunia.fa_campaign_manager.domains.sessions.dto.SessionOutDto;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserOutDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -21,6 +24,9 @@ public class CampaignOutDto extends CommonOutDto {
   @Schema(description = "캠페인 명")
   private String name;
 
+  @Schema(description = "캠페인 설명")
+  private String description;
+
   @Schema(description = "캠페인 상태")
   private STATUS_CODE status;
 
@@ -31,33 +37,11 @@ public class CampaignOutDto extends CommonOutDto {
   private OffsetDateTime endDate;
 
   @Schema(description = "세션 목록")
-  private List<SessionList> sessionList;
+  private List<SessionOutDto> sessions;
 
   @Schema(description = "참여 캐릭터 목록")
-  private List<CharacterList> characterList;
+  private List<CharacterOutDto> characters;
 
   @Schema(description = "캠페인 멤버 목록")
-  private List<MemberList> memberList;
-
-  @Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
-  public static class SessionList {
-    private Long id;
-    private Integer no;
-    private String name;
-    private String status;
-  }
-
-  @Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
-  public static class CharacterList {
-    private Long id;
-    private String name;
-    private String race;
-  }
-
-  @Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
-  public static class MemberList {
-    private Long userId;
-    private String userName;
-    private String role;
-  }
+  private List<UserOutDto> members;
 }
