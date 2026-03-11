@@ -16,9 +16,9 @@ import java.util.Collections;
 @Primary
 @RequiredArgsConstructor
 public class AppUserDetailsService implements UserDetailsService {
-
+  
   private final UserRepository userRepository;
-
+  
   @Override
   @Transactional(readOnly = true)
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -31,7 +31,7 @@ public class AppUserDetailsService implements UserDetailsService {
         .build())
       .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + email));
   }
-
+  
   @Transactional(readOnly = true)
   public UserDetails loadByDiscordId(String discordId) throws UsernameNotFoundException {
     return userRepository.findByDiscordId(discordId)

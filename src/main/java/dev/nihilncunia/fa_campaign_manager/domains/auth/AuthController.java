@@ -29,10 +29,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Tag(name = "인증 관리")
 public class AuthController {
-
+  
   private final AuthService authService;
   private final JwtProvider jwtProvider;
-
+  
   @PostMapping("/signin")
   @Operation(summary = "로그인", description = "이메일과 비밀번호를 사용하여 로그인합니다. " +
     "성공 시 액세스 토큰과 리프레시 토큰이 쿠키로 발급됩니다.")
@@ -49,7 +49,7 @@ public class AuthController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"인증 실패", "권한 부족", "잘못된 요청"})
+  @ApiExampleExclude(keys = { "인증 실패", "권한 부족", "잘못된 요청" })
   public BaseResponse<UserOutDto> signIn(@RequestBody UserInDto userInDto, HttpServletResponse response) {
     UserOutDto userOutDto = authService.signIn(userInDto);
     
@@ -57,15 +57,15 @@ public class AuthController {
     String accessToken = jwtProvider.createAccessToken(userOutDto.getId(), userOutDto.getEmail(), userOutDto.getRole().name());
     Cookie accessCookie = jwtProvider.createCookie("accessToken", accessToken, 3600);
     response.addCookie(accessCookie);
-
+    
     // 리프레시 토큰 쿠키 생성 (7일)
     String refreshToken = jwtProvider.createRefreshToken(userOutDto.getId(), userOutDto.getEmail(), userOutDto.getRole().name());
     Cookie refreshCookie = jwtProvider.createCookie("refreshToken", refreshToken, 7 * 24 * 3600);
     response.addCookie(refreshCookie);
-
+    
     return BaseResponse.ok(userOutDto, RESPONSE_CODE.OK, RESPONSE_MESSAGE.AUTH_SIGN_IN_SUCCESS);
   }
-
+  
   @IsUser
   @PostMapping("/signout")
   @Operation(summary = "로그아웃", description = "현재 세션을 종료하고 브라우저에 저장된 인증 쿠키를 삭제합니다.")
@@ -81,7 +81,7 @@ public class AuthController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"권한 부족", "잘못된 요청"})
+  @ApiExampleExclude(keys = { "권한 부족", "잘못된 요청" })
   public BaseResponse<Void> signOut(HttpServletResponse response) {
     Long userId = CurrentUserProvider.getCurrentUserId().orElseThrow();
     authService.signOut(userId);
@@ -94,7 +94,7 @@ public class AuthController {
     
     return BaseResponse.ok(null, RESPONSE_CODE.OK, RESPONSE_MESSAGE.AUTH_SIGN_OUT_SUCCESS);
   }
-
+  
   @PostMapping("/refresh")
   @Operation(summary = "토큰 재발급", description = "리프레시 토큰 쿠키를 사용하여 액세스 토큰을 갱신합니다.")
   @ApiResponses(value = {
@@ -111,24 +111,24 @@ public class AuthController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"인증 실패", "권한 부족", "잘못된 요청"})
+  @ApiExampleExclude(keys = { "인증 실패", "권한 부족", "잘못된 요청" })
   public BaseResponse<Void> refresh(
-      @CookieValue(value = "refreshToken", required = false) String refreshToken,
-      HttpServletResponse response) {
+    @CookieValue(value = "refreshToken", required = false) String refreshToken,
+    HttpServletResponse response) {
     
     TokenInfoDto tokens = authService.refreshToken(refreshToken);
     
     // 새로운 액세스 토큰 쿠키 설정 (1시간)
     Cookie accessCookie = jwtProvider.createCookie("accessToken", tokens.getAccessToken(), 3600);
     response.addCookie(accessCookie);
-
+    
     // 새로운 리프레시 토큰 쿠키 설정 (7일)
     Cookie refreshCookie = jwtProvider.createCookie("refreshToken", tokens.getRefreshToken(), 7 * 24 * 3600);
     response.addCookie(refreshCookie);
     
     return BaseResponse.ok(null, RESPONSE_CODE.OK, RESPONSE_MESSAGE.AUTH_REFRESH_SUCCESS);
   }
-
+  
   @IsUser
   @PostMapping("/password")
   @Operation(summary = "비밀번호 변경", description = "현재 로그인된 사용자의 비밀번호를 변경합니다.")
@@ -145,7 +145,7 @@ public class AuthController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"권한 부족", "잘못된 요청"})
+  @ApiExampleExclude(keys = { "권한 부족", "잘못된 요청" })
   public BaseResponse<Void> changePassword(@RequestBody Map<String, String> request) {
     authService.changePassword(request.get("oldPassword"), request.get("newPassword"));
     

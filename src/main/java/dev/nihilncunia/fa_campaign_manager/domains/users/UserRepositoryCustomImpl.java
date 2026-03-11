@@ -10,35 +10,35 @@ import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserInDto;
 import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserOutDto;
 
 public class UserRepositoryCustomImpl extends CustomRepositorySupport implements UserRepositoryCustom {
-
+  
   private final UserMapper userMapper;
-
+  
   public UserRepositoryCustomImpl(JPAQueryFactory queryFactory, UserMapper userMapper) {
     super(queryFactory);
     this.userMapper = userMapper;
   }
-
+  
   @Override
   public ListOutDto<UserOutDto> findAll(UserInDto userInDto) {
     QUserEntity user = QUserEntity.userEntity;
-
+    
     BooleanBuilder builder = SearchHelper.buildAll(userInDto, user);
-
+    
     JPAQuery<UserEntity> contentQuery = jpaQueryFactory
-        .selectFrom(user)
-        .where(builder);
-
+      .selectFrom(user)
+      .where(builder);
+    
     JPAQuery<Long> countQuery = jpaQueryFactory
-        .select(user.count())
-        .from(user)
-        .where(builder);
-
+      .select(user.count())
+      .from(user)
+      .where(builder);
+    
     return applyDynamicPagination(
-        userInDto,
-        user,
-        contentQuery,
-        countQuery,
-        user.id.desc(),
-        userMapper::toDtoList);
+      userInDto,
+      user,
+      contentQuery,
+      countQuery,
+      user.id.desc(),
+      userMapper::toDtoList);
   }
 }

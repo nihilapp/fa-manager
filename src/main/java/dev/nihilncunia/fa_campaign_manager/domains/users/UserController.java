@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Tag(name = "사용자 관리")
 public class UserController {
-
+  
   private final UserService userService;
-
+  
   @PostMapping
   @Operation(summary = "사용자 생성 (회원가입)",
     description = "새로운 사용자를 등록합니다. 초기 역할은 ROLE_USER로 설정됩니다.")
@@ -47,15 +47,15 @@ public class UserController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"인증 실패", "권한 부족", "잘못된 요청"})
+  @ApiExampleExclude(keys = { "인증 실패", "권한 부족", "잘못된 요청" })
   public BaseResponse<UserOutDto> createUser(
-      @Validated(ValidationGroups.Create.class) @RequestBody UserInDto userInDto) {
+    @Validated(ValidationGroups.Create.class) @RequestBody UserInDto userInDto) {
     UserOutDto newUser = userService.createUser(userInDto);
     
     return BaseResponse.ok(newUser, RESPONSE_CODE.CREATED,
-        RESPONSE_MESSAGE.USER_CREATE_SUCCESS);
+      RESPONSE_MESSAGE.USER_CREATE_SUCCESS);
   }
-
+  
   @IsUser
   @GetMapping("/me")
   @Operation(summary = "내 정보 조회",
@@ -72,7 +72,7 @@ public class UserController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"권한 부족", "잘못된 요청"})
+  @ApiExampleExclude(keys = { "권한 부족", "잘못된 요청" })
   public BaseResponse<UserOutDto> getMyInfo() {
     UserOutDto user = userService.getMyInfo();
     
@@ -95,12 +95,12 @@ public class UserController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"잘못된 요청"})
+  @ApiExampleExclude(keys = { "잘못된 요청" })
   public BaseResponse<ListOutDto<UserOutDto>> getUserList(UserInDto searchDto) {
     ListOutDto<UserOutDto> userList = userService.getUserList(searchDto);
     
     return BaseResponse.ok(userList, RESPONSE_CODE.OK,
-        RESPONSE_MESSAGE.USER_GET_LIST_SUCCESS);
+      RESPONSE_MESSAGE.USER_GET_LIST_SUCCESS);
   }
   
   @GetMapping("/{id}")
@@ -119,13 +119,13 @@ public class UserController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"인증 실패", "권한 부족", "잘못된 요청"})
+  @ApiExampleExclude(keys = { "인증 실패", "권한 부족", "잘못된 요청" })
   public BaseResponse<UserOutDto> getUserById(@PathVariable Long id) {
     UserOutDto user = userService.getUserById(id);
     
     return BaseResponse.ok(user, RESPONSE_CODE.OK, RESPONSE_MESSAGE.USER_GET_DETAIL_SUCCESS);
   }
-
+  
   @IsUser
   @PutMapping("/{id}")
   @Operation(summary = "사용자 정보 수정",
@@ -143,16 +143,16 @@ public class UserController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"잘못된 요청"})
+  @ApiExampleExclude(keys = { "잘못된 요청" })
   public BaseResponse<UserOutDto> updateUser(
-      @PathVariable Long id,
-      @Validated(ValidationGroups.Update.class) @RequestBody UserInDto userInDto) {
+    @PathVariable Long id,
+    @Validated(ValidationGroups.Update.class) @RequestBody UserInDto userInDto) {
     UserOutDto updatedUser = userService.updateUser(id, userInDto);
     
     return BaseResponse.ok(updatedUser, RESPONSE_CODE.OK,
-        RESPONSE_MESSAGE.USER_UPDATE_SUCCESS);
+      RESPONSE_MESSAGE.USER_UPDATE_SUCCESS);
   }
-
+  
   @IsUser
   @DeleteMapping("/{id}")
   @Operation(summary = "사용자 삭제 (탈퇴)",
@@ -170,7 +170,7 @@ public class UserController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"잘못된 요청"})
+  @ApiExampleExclude(keys = { "잘못된 요청" })
   public BaseResponse<Void> deleteUser(@PathVariable Long id) {
     userService.deleteUser(id);
     return BaseResponse.ok(null, RESPONSE_CODE.OK, RESPONSE_MESSAGE.USER_DELETE_SUCCESS);

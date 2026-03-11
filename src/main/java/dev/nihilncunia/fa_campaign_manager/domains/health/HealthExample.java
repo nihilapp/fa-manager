@@ -13,6 +13,7 @@ public class HealthExample {
   
   /**
    * 서버 상태 정상일 때의 응답입니다.
+   *
    * @return 응답 객체
    */
   public Object healthSuccess() {
@@ -26,6 +27,7 @@ public class HealthExample {
   
   /**
    * 서버 상태 비정상일 때의 응답입니다.
+   *
    * @return 응답 객체
    */
   public Object healthFail() {

@@ -8,6 +8,7 @@ public interface AuthService {
   
   /**
    * 로그인
+   *
    * @param userInDto 사용자 입력 정보
    * @return 로그인한 사용자 정보
    */
@@ -15,6 +16,7 @@ public interface AuthService {
   
   /**
    * 로그아웃
+   *
    * @param userId 사용자 아이디
    */
   void signOut(Long userId);

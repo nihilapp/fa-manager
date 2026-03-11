@@ -25,6 +25,7 @@ public class HeathController {
   
   /**
    * 서버 활성 상태 체크를 수행합니다.
+   *
    * @return 서버 활성 상태
    */
   @GetMapping("")
@@ -45,7 +46,7 @@ public class HeathController {
       )
     )
   })
-  @ApiExampleExclude(keys = {"인증 실패", "권한 부족", "잘못된 요청"})
+  @ApiExampleExclude(keys = { "인증 실패", "권한 부족", "잘못된 요청" })
   public BaseResponse<Boolean> getHealthStatus() {
     boolean health = healthService.getHealthStatus();
     return BaseResponse.ok(health, RESPONSE_CODE.OK, RESPONSE_MESSAGE.HEALTH_SUCCESS);
