@@ -13,14 +13,14 @@ import lombok.Setter;
 public class JwtProperties {
   private Secret secret = new Secret();
   private Expiration expiration = new Expiration();
-
+  
   @Getter
   @Setter
   public static class Secret {
     private String access;
     private String refresh;
   }
-
+  
   @Getter
   @Setter
   public static class Expiration {

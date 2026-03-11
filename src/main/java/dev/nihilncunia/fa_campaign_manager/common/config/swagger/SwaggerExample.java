@@ -14,6 +14,7 @@ public class SwaggerExample {
   
   /**
    * 400 Bad Request 응답 예시를 생성합니다.
+   *
    * @return 응답 예시 객체
    */
   public Object badRequest() {
@@ -27,6 +28,7 @@ public class SwaggerExample {
   
   /**
    * 401 Unauthorized 응답 예시를 생성합니다.
+   *
    * @return 응답 예시 객체
    */
   public Object unauthorized() {
@@ -40,6 +42,7 @@ public class SwaggerExample {
   
   /**
    * 403 Forbidden 응답 예시를 생성합니다.
+   *
    * @return 응답 예시 객체
    */
   public Object forbidden() {
@@ -53,6 +56,7 @@ public class SwaggerExample {
   
   /**
    * 500 Internal Server Error 응답 예시를 생성합니다.
+   *
    * @return 응답 예시 객체
    */
   public Object internal_error() {
@@ -66,6 +70,7 @@ public class SwaggerExample {
   
   /**
    * 로그인 성공 응답 예시를 생성합니다.
+   *
    * @return 응답 예시 객체
    */
   public Object authSignInSuccess() {
@@ -79,6 +84,7 @@ public class SwaggerExample {
   
   /**
    * 토큰 재발급 성공 응답 예시를 생성합니다.
+   *
    * @return 응답 예시 객체
    */
   public Object authRefreshSuccess() {
@@ -92,6 +98,7 @@ public class SwaggerExample {
   
   /**
    * 로그아웃 성공 응답 예시를 생성합니다.
+   *
    * @return 응답 예시 객체
    */
   public Object authSignOutSuccess() {
@@ -105,6 +112,7 @@ public class SwaggerExample {
   
   /**
    * 인증 필요 실패 응답 예시를 생성합니다.
+   *
    * @return 응답 예시 객체
    */
   public Object authFailUnauthorized() {
@@ -118,6 +126,7 @@ public class SwaggerExample {
   
   /**
    * 잘못된 자격 증명 실패 응답 예시를 생성합니다.
+   *
    * @return 응답 예시 객체
    */
   public Object authFailInvalidCredentials() {
@@ -131,6 +140,7 @@ public class SwaggerExample {
   
   /**
    * 사용자 미존재 실패 응답 예시를 생성합니다.
+   *
    * @return 응답 예시 객체
    */
   public Object authFailUserNotFound() {

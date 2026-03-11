@@ -22,7 +22,7 @@ import java.util.function.Function;
 public abstract class CustomRepositorySupport {
   
   protected final JPAQueryFactory jpaQueryFactory;
-
+  
   /**
    * 페이징 유무에 따라 ListOutDto 객체를 반환합니다.
    * 엔티티 기반의 동적 정렬이 자동으로 적용됩니다.
@@ -52,18 +52,18 @@ public abstract class CustomRepositorySupport {
       defaultOrder
     );
     contentQuery.orderBy(orders);
-
+    
     Pageable pageable = inDto.getPageable();
-
+    
     // 2. 페이징 여부 판단 (size가 1 이상일 때만 페이징)
     if (pageable.isPaged()) {
       contentQuery.offset(pageable.getOffset())
         .limit(pageable.getPageSize());
-
+      
       List<E> content = Objects.requireNonNull(contentQuery.fetch());
       Long total = countQuery.fetchOne();
-      long safeTotal = (total == null) ? 0L : total;
-
+      long safeTotal = ( total == null ) ? 0L : total;
+      
       List<D> dtos = mapper.apply(content);
       return ListOutDto.of(new PageImpl<>(dtos, pageable, safeTotal));
     } else {
@@ -72,17 +72,17 @@ public abstract class CustomRepositorySupport {
       return ListOutDto.of(mapper.apply(content));
     }
   }
-
+  
   /**
    * 페이징과 정렬을 적용하여 조회 결과를 반환합니다.
    * Querydsl의 contentQuery와 countQuery를 받아 정렬과 오프셋을 적용한 뒤 Page 객체로 반환합니다.
    *
-   * @param inDto 페이징 및 정렬 정보를 담고 있는 SearchDto 객체
-   * @param sortMap 정렬 가능한 필드와 Querydsl 표현식의 매핑 정보 (화이트리스트)
+   * @param inDto        페이징 및 정렬 정보를 담고 있는 SearchDto 객체
+   * @param sortMap      정렬 가능한 필드와 Querydsl 표현식의 매핑 정보 (화이트리스트)
    * @param contentQuery 데이터를 조회할 Querydsl JPAQuery 객체
-   * @param countQuery 데이터의 전체 개수를 조회할 Querydsl JPAQuery 객체
+   * @param countQuery   데이터의 전체 개수를 조회할 Querydsl JPAQuery 객체
    * @param defaultOrder 정렬 조건이 지정되지 않았을 때 사용할 기본 정렬 조건
-   * @param <T> 조회 결과 타입
+   * @param <T>          조회 결과 타입
    * @return 페이징 처리된 조회 결과 (Page 객체)
    */
   protected <T> Page<T> applyPagination(
@@ -113,7 +113,7 @@ public abstract class CustomRepositorySupport {
     
     // 전체 개수 조회
     Long total = countQuery.fetchOne();
-    long safeTotal = (total == null) ? 0L : total;
+    long safeTotal = ( total == null ) ? 0L : total;
     
     return new PageImpl<>(content, pageable, safeTotal);
   }

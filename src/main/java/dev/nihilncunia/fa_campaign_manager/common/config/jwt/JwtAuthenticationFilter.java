@@ -37,25 +37,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       filterChain.doFilter(request, response);
       return;
     }
-
+    
     // 1. 요청에서 accessToken 추출
     String accessToken = jwtProvider.resolveToken(request, "accessToken");
     String refreshToken = jwtProvider.resolveToken(request, "refreshToken");
     
     String targetToken = null;
     boolean isRefresh = false;
-
+    
     // 2. 토큰 결정 (액세스 토큰 우선, 없으면 리프레시 토큰 확인)
     if (accessToken != null && jwtProvider.validateToken(accessToken, false)) {
-        targetToken = accessToken;
-        isRefresh = false;
-        log.debug("Using accessToken for authentication");
+      targetToken = accessToken;
+      isRefresh = false;
+      log.debug("Using accessToken for authentication");
     } else if (refreshToken != null && jwtProvider.validateToken(refreshToken, true)) {
-        targetToken = refreshToken;
-        isRefresh = true;
-        log.info("AccessToken missing or invalid. Using refreshToken for authentication.");
+      targetToken = refreshToken;
+      isRefresh = true;
+      log.info("AccessToken missing or invalid. Using refreshToken for authentication.");
     }
-
+    
     // 3. 인증 처리
     if (targetToken != null) {
       String email = jwtProvider.getEmail(targetToken, isRefresh);
@@ -72,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
           new WebAuthenticationDetailsSource().buildDetails(request));
         
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.info("User {} authenticated via {}", email, (isRefresh ? "refreshToken" : "accessToken"));
+        log.info("User {} authenticated via {}", email, ( isRefresh ? "refreshToken" : "accessToken" ));
       }
     }
     

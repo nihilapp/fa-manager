@@ -9,7 +9,8 @@ import dev.nihilncunia.fa_campaign_manager.common.annotation.SearchCondition;
 import java.lang.reflect.Field;
 
 public final class SearchHelper {
-  private SearchHelper() {}
+  private SearchHelper() {
+  }
   
   /**
    * DTO의 어노테이션 필드와 동적 검색 필드(searchType/searchKeyword)를 분석하여 조건을 생성합니다.
@@ -35,11 +36,12 @@ public final class SearchHelper {
   
   /**
    * &#064;SearchCondition 어노테이션이 붙은 필드를 순회하며 AND 조건을 생성합니다.
-   * @param dto 검색 조건을 담고 있는 DTO 객체
+   *
+   * @param dto      검색 조건을 담고 있는 DTO 객체
    * @param dtoClass DTO 클래스 타입
-   * @param path Querydsl 경로 빌더
-   * @param builder BooleanBuilder 객체
-   * @param <E> 엔티티 타입
+   * @param path     Querydsl 경로 빌더
+   * @param builder  BooleanBuilder 객체
+   * @param <E>      엔티티 타입
    */
   private static <E> void processAnnotations(Object dto, Class<?> dtoClass, PathBuilder<E> path, BooleanBuilder builder) {
     Field[] fields = dtoClass.getDeclaredFields();
@@ -139,11 +141,12 @@ public final class SearchHelper {
   
   /**
    * searchType과 searchKeyword가 모두 존재할 때만 해당 필드에 대한 LIKE 조건을 생성합니다.
-   * @param dto 검색 조건을 담고 있는 DTO 객체
+   *
+   * @param dto      검색 조건을 담고 있는 DTO 객체
    * @param dtoClass DTO 클래스 타입
-   * @param path Querydsl 경로 빌더
-   * @param builder BooleanBuilder 객체
-   * @param <E> 엔티티 타입
+   * @param path     Querydsl 경로 빌더
+   * @param builder  BooleanBuilder 객체
+   * @param <E>      엔티티 타입
    */
   private static <E> void processDynamicSearch(Object dto, Class<?> dtoClass, PathBuilder<E> path, BooleanBuilder builder) {
     try {
@@ -152,8 +155,8 @@ public final class SearchHelper {
       
       // 타입과 키워드가 모두 유효할 때만 쿼리 생성 (마스터의 요청 반영)
       if (!isEmpty(typeObj) && !isEmpty(keywordObj)) {
-        String type = ((String) typeObj).trim();
-        String keyword = ((String) keywordObj).trim();
+        String type = ( (String) typeObj ).trim();
+        String keyword = ( (String) keywordObj ).trim();
         
         // searchType이 필드명과 일치한다고 가정하고 LIKE 조건 생성
         if (!"all".equalsIgnoreCase(type)) {
@@ -169,8 +172,9 @@ public final class SearchHelper {
   
   /**
    * 리플렉션을 사용하여 객체의 필드 값을 가져옵니다.
-   * @param dto 대상 객체
-   * @param clazz 대상 클래스 타입
+   *
+   * @param dto       대상 객체
+   * @param clazz     대상 클래스 타입
    * @param fieldName 필드 이름
    * @return 필드 값
    * @throws Exception 예외
@@ -183,6 +187,7 @@ public final class SearchHelper {
   
   /**
    * 객체가 비어있는지 확인합니다.
+   *
    * @param value 확인할 객체
    * @return 비어있으면 true, 아니면 false
    */

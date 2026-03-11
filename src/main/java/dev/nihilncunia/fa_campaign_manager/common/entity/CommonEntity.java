@@ -25,50 +25,50 @@ public class CommonEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(description = "ID", example = "1")
   private Long id;
-
+  
   // --- 상태 플래그 (Y/N) ---
-
+  
   @Builder.Default
   @Schema(description = "사용 여부", example = "Y", allowableValues = { "Y", "N" })
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 1, columnDefinition = "char(1) default 'Y'")
   private YN_CODE useYn = YN_CODE.Y;
-
+  
   @Builder.Default
   @Schema(description = "삭제 여부", example = "N", allowableValues = { "Y", "N" })
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 1, columnDefinition = "char(1) default 'N'")
   private YN_CODE deleteYn = YN_CODE.N;
-
+  
   // --- 생성 정보 (Create) ---
-
+  
   @CreatedBy
   @Schema(description = "생성자 ID", example = "1")
   private Long creatorId;
-
+  
   @CreatedDate
   @Column(updatable = false)
   @Schema(description = "생성일시", example = "2026-03-07T10:00:00.000+09:00")
   private OffsetDateTime createDate;
-
+  
   // --- 수정 정보 (Update) ---
-
+  
   @LastModifiedBy
   @Schema(description = "수정자 ID", example = "1")
   private Long updaterId;
-
+  
   @LastModifiedDate
   @Schema(description = "수정일시", example = "2026-03-07T10:00:00.000+09:00")
   private OffsetDateTime updateDate;
-
+  
   // --- 삭제 정보 (Delete) ---
-
+  
   @Schema(description = "삭제자 ID", example = "1")
   private Long deleterId;
-
+  
   @Schema(description = "삭제일시", example = "2026-03-07T10:00:00.000+09:00")
   private OffsetDateTime deleteDate;
-
+  
   /**
    * 엔티티 소프트 삭제(Soft Delete) 처리
    * 실제 DB에서 레코드를 삭제(Hard Delete)하지 않고, 플래그를 변경하여 논리적으로 삭제된 것으로 간주합니다.
@@ -85,7 +85,7 @@ public class CommonEntity {
     this.deleterId = deleterId;
     this.deleteDate = OffsetDateTime.now();
   }
-
+  
   @PrePersist
   protected void onPrePersist() {
     if (this.useYn == null)

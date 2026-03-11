@@ -17,7 +17,7 @@ import java.util.Objects;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+  
   /**
    * 커스텀 예외(CustomException) 발생 시 처리 로직입니다.
    */
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     log.error("CustomException: {}", e.getMessage());
     return BaseResponse.fail(null, e.getResponseCode(), e.getMessage());
   }
-
+  
   /**
    * 권한 부족 예외 처리 (AccessDeniedException)
    */
@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     log.error("Access Denied: {}", e.getMessage());
     return BaseResponse.fail(null, RESPONSE_CODE.FORBIDDEN, RESPONSE_MESSAGE.DEFAULT_FORBIDDEN);
   }
-
+  
   /**
    * @Validated 또는 @Valid 검증 실패 시 (MethodArgumentNotValidException)
    */
@@ -43,11 +43,11 @@ public class GlobalExceptionHandler {
   public BaseResponse<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
     String errorMessage = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
     log.error("Validation Error: {}", errorMessage);
-
+    
     return BaseResponse.fail(null, RESPONSE_CODE.BAD_REQUEST,
-        RESPONSE_MESSAGE.DEFAULT_VALIDATION_ERROR_DETAILS.getMessage(errorMessage));
+      RESPONSE_MESSAGE.DEFAULT_VALIDATION_ERROR_DETAILS.getMessage(errorMessage));
   }
-
+  
   /**
    * 파라미터 검증 실패 시 (ConstraintViolationException)
    */
@@ -55,9 +55,9 @@ public class GlobalExceptionHandler {
   public BaseResponse<Void> handleConstraintViolationException(ConstraintViolationException e) {
     log.error("Constraint Violation: {}", e.getMessage());
     return BaseResponse.fail(null, RESPONSE_CODE.BAD_REQUEST,
-        RESPONSE_MESSAGE.DEFAULT_VALIDATION_ERROR);
+      RESPONSE_MESSAGE.DEFAULT_VALIDATION_ERROR);
   }
-
+  
   /**
    * 요청 바디가 없거나 형식이 잘못된 경우 (HttpMessageNotReadableException)
    */
@@ -65,9 +65,9 @@ public class GlobalExceptionHandler {
   public BaseResponse<Void> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
     log.error("Message Not Readable: {}", e.getMessage());
     return BaseResponse.fail(null, RESPONSE_CODE.BAD_REQUEST,
-        RESPONSE_MESSAGE.DEFAULT_MESSAGE_NOT_READABLE);
+      RESPONSE_MESSAGE.DEFAULT_MESSAGE_NOT_READABLE);
   }
-
+  
   /**
    * 지원되지 않는 Content-Type으로 요청한 경우 (HttpMediaTypeNotSupportedException)
    */
@@ -75,9 +75,9 @@ public class GlobalExceptionHandler {
   public BaseResponse<Void> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
     log.error("Media Type Not Supported: {}", e.getMessage());
     return BaseResponse.fail(null, RESPONSE_CODE.BAD_REQUEST,
-        RESPONSE_MESSAGE.DEFAULT_MEDIA_TYPE_NOT_SUPPORTED);
+      RESPONSE_MESSAGE.DEFAULT_MEDIA_TYPE_NOT_SUPPORTED);
   }
-
+  
   /**
    * 처리되지 않은 일반 예외(Exception) 발생 시 처리 로직입니다.
    */
@@ -85,6 +85,6 @@ public class GlobalExceptionHandler {
   public BaseResponse<Void> handleException(Exception e) {
     log.error("Unhandled Exception: ", e);
     return BaseResponse.fail(null, RESPONSE_CODE.INTERNAL_SERVER_ERROR,
-        RESPONSE_MESSAGE.DEFAULT_INTERNAL_SERVER_ERROR);
+      RESPONSE_MESSAGE.DEFAULT_INTERNAL_SERVER_ERROR);
   }
 }

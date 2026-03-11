@@ -32,16 +32,16 @@ import java.util.List;
 @EnableMethodSecurity // 메서드 보안 활성화
 @RequiredArgsConstructor
 public class CommonSecurityConfig {
-
+  
   private final JwtProvider jwtProvider;
   private final AppUserDetailsService userDetailsService;
   private final JwtExceptionFilter jwtExceptionFilter;
   private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
   private final CustomAccessDeniedHandler customAccessDeniedHandler;
-
+  
   @Value("${app.security.use-discord:false}")
   private boolean useDiscord;
-
+  
   private static final String[] ALLOWED_ENDPOINTS = {
     "/health/**",
     "/swagger-ui/**",
@@ -51,7 +51,7 @@ public class CommonSecurityConfig {
     "/webjars/**",
     "/auth/**",
   };
-
+  
   /**
    * 비밀번호 암호화를 위한 Encoder 빈
    */
@@ -59,7 +59,7 @@ public class CommonSecurityConfig {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
-
+  
   /**
    * 권한 계층 구조 설정
    * USER_ROLE 상수에 정의된 이름을 그대로 사용하여 계층을 구성합니다.
@@ -71,7 +71,7 @@ public class CommonSecurityConfig {
       "ROLE_ADMIN > ROLE_USER"
     ));
   }
-
+  
   /**
    * 전역 CORS 설정
    */
@@ -84,26 +84,26 @@ public class CommonSecurityConfig {
     configuration.setExposedHeaders(List.of("Set-Cookie"));
     configuration.setAllowCredentials(true);
     configuration.setMaxAge(3600L);
-
+    
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
   }
-
+  
   /**
    * 통합 보안 필터 체인 설정
    */
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+    
     JwtAuthenticationFilter jwtAuthenticationFilter =
       new JwtAuthenticationFilter(jwtProvider, userDetailsService);
-
+    
     // loadByDiscordId를 위해 커스텀 서비스로 변환
     
     DiscordAuthenticationFilter discordAuthenticationFilter =
       new DiscordAuthenticationFilter((AppUserDetailsService) userDetailsService, useDiscord);
-
+    
     http
       .csrf(AbstractHttpConfigurer::disable)
       .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -123,7 +123,7 @@ public class CommonSecurityConfig {
       .addFilterBefore(discordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
       .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
       .addFilterBefore(jwtExceptionFilter, DiscordAuthenticationFilter.class);
-
+    
     return http.build();
   }
 }

@@ -17,24 +17,25 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class DiscordAuthenticationFilter extends OncePerRequestFilter {
-
+  
   private final AppUserDetailsService userDetailsService;
   private final boolean useDiscord;
-
+  
   @Override
-  protected void doFilterInternal(@NonNull HttpServletRequest request,
-      @NonNull HttpServletResponse response,
-      @NonNull FilterChain filterChain)
-      throws ServletException, IOException {
-
+  protected void doFilterInternal(
+    @NonNull HttpServletRequest request,
+    @NonNull HttpServletResponse response,
+    @NonNull FilterChain filterChain)
+    throws ServletException, IOException {
+    
     String discordId = request.getHeader("x-discord-id");
-
+    
     if (useDiscord && discordId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       try {
         UserDetails userDetails = userDetailsService.loadByDiscordId(discordId);
         
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-            userDetails, null, userDetails.getAuthorities());
+          userDetails, null, userDetails.getAuthorities());
         
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -45,7 +46,7 @@ public class DiscordAuthenticationFilter extends OncePerRequestFilter {
         logger.error("Discord Auth failed for ID: " + discordId + " - " + e.getMessage());
       }
     }
-
+    
     filterChain.doFilter(request, response);
   }
 }

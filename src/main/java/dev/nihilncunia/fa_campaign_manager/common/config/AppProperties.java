@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
   private Security security = new Security();
-
+  
   @Getter
   @Setter
   public static class Security {
