@@ -11,12 +11,12 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CharacterClass {
-    @Schema(description = "클래스 명", example = "Wizard")
-    private String className;
-
-    @Schema(description = "서브 클래스 명", example = "Evocation")
-    private String subClass;
-
-    @Schema(description = "레벨", example = "5")
-    private Integer level;
+  @Schema(description = "클래스 명", example = "Wizard")
+  private String className;
+  
+  @Schema(description = "서브 클래스 명", example = "Evocation")
+  private String subClass;
+  
+  @Schema(description = "레벨", example = "5")
+  private Integer level;
 }

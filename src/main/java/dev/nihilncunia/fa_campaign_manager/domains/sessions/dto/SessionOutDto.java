@@ -3,11 +3,14 @@ package dev.nihilncunia.fa_campaign_manager.domains.sessions.dto;
 import dev.nihilncunia.fa_campaign_manager.common.constant.SESSION_ROLE;
 import dev.nihilncunia.fa_campaign_manager.common.constant.STATUS_CODE;
 import dev.nihilncunia.fa_campaign_manager.common.dto.CommonOutDto;
+import dev.nihilncunia.fa_campaign_manager.domains.characters.dto.CharacterOutDto;
+import dev.nihilncunia.fa_campaign_manager.domains.users.dto.UserOutDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,7 +44,13 @@ public class SessionOutDto extends CommonOutDto {
   
   @Schema(description = "세션 시작 시간")
   private OffsetDateTime playDate;
-
+  
   @Schema(description = "사용자 역할 (MASTER/PLAYER)")
   private SESSION_ROLE sessionRole;
+  
+  @Schema(description = "참여 플레이어 목록")
+  private List<UserOutDto> playerList;
+  
+  @Schema(description = "참여 캐릭터 목록")
+  private List<CharacterOutDto> characterList;
 }

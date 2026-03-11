@@ -66,9 +66,9 @@ public class SessionEntity extends CommonEntity {
   
   @Schema(description = "세션 시작 시간", example = "2023-01-01T10:00:00.000+09:00")
   private OffsetDateTime playDate;
-
+  
   @Builder.Default
-  @OneToMany(mappedBy = "session", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  @OneToMany(mappedBy = "session", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
   @Schema(description = "참여 플레이어 목록")
-  private List<SessionPlayerEntity> players = new ArrayList<>();
+  private List<SessionPlayerEntity> playerList = new ArrayList<>();
 }

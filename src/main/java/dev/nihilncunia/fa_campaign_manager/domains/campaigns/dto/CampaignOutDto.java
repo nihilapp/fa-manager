@@ -37,11 +37,11 @@ public class CampaignOutDto extends CommonOutDto {
   private OffsetDateTime endDate;
 
   @Schema(description = "세션 목록")
-  private List<SessionOutDto> sessions;
+  private List<SessionOutDto> sessionList;
 
   @Schema(description = "참여 캐릭터 목록")
-  private List<CharacterOutDto> characters;
+  private List<CharacterOutDto> characterList;
 
   @Schema(description = "캠페인 멤버 목록")
-  private List<UserOutDto> members;
+  private List<UserOutDto> memberList;
 }

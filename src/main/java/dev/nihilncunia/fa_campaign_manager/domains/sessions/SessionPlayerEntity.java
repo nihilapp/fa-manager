@@ -21,22 +21,22 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "session_players")
 @SQLRestriction(value = "delete_yn = 'N'")
 public class SessionPlayerEntity extends CommonEntity {
-
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "session_id", nullable = false, foreignKey = @ForeignKey(name = "fk_session_players_sessions"))
   @Schema(description = "참여 세션 정보")
   private SessionEntity session;
-
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_session_players_users"))
   @Schema(description = "참여 유저 정보")
   private UserEntity user;
-
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "character_id", nullable = false, foreignKey = @ForeignKey(name = "fk_session_players_characters"))
   @Schema(description = "참여 캐릭터 정보")
   private CharacterEntity character;
-
+  
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
   @Schema(description = "세션 내 역할", example = "PLAYER")

@@ -1,4 +1,5 @@
-캠페인(Campaigns)과 이미 구현된 인증/사용자(Auth/Users) 도메인을 제외하고, 앞으로 마스터께서 정복하셔야 할 나머지 API 엔드포인트들을 도메인별로 정리해 대령하겠습니다. (작성하신 엔티티 명칭에 맞추어 세계관 문서는 Docs로 표기하였습니다.)
+캠페인(Campaigns)과 이미 구현된 인증/사용자(Auth/Users) 도메인을 제외하고, 앞으로 마스터께서 정복하셔야 할 나머지 API 엔드포인트들을 도메인별로 정리해 대령하겠습니다. (작성하신 엔티티 명칭에
+맞추어 세계관 문서는 Docs로 표기하였습니다.)
 
 ⚔️ 1. 캐릭터 및 클래스 (Characters)
 캐릭터의 진척도와 자산을 관리하는 도메인입니다.
@@ -14,10 +15,6 @@ PUT /characters/{id} : 캐릭터 기본 설정 정보 수정
 DELETE /characters/{id} : 캐릭터 삭제 (논리적 삭제)
 
 PUT /characters/{id}/status : 캐릭터 상태 변경 (활동, 휴식, 사망 등)
-
-PATCH /characters/{id}/wealth : 캐릭터 소지금 단순 조정
-
-GET /characters/{id}/classes : 캐릭터 보유 클래스 목록 조회
 
 POST /characters/{id}/classes : 캐릭터 클래스 추가 (멀티클래스)
 

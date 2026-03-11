@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-03-11T15:24:52.508Z",
+  "lastUpdated": "2026-03-08T14:48:31.127Z",
   "activeFeatures": [],
   "primaryFeature": null,
   "features": {},
@@ -13,5 +13,7 @@
     "startedAt": "2026-03-10T10:14:09.454Z",
     "onboardingCompleted": false,
     "lastActivity": "2026-03-10T10:14:09.454Z"
-  }
+  },
+  "_snapshotTimestamp": "2026-03-11T15:16:54.237Z",
+  "_reason": "pre-compress"
 }

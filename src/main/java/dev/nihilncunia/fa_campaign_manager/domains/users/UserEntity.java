@@ -86,17 +86,17 @@ public class UserEntity extends CommonEntity {
   @Builder.Default
   @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
   @Schema(description = "보유 캐릭터 목록")
-  private List<CharacterEntity> characters = new ArrayList<>();
+  private List<CharacterEntity> characterList = new ArrayList<>();
   
   @Builder.Default
   @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
   @Schema(description = "참여 캠페인 목록")
-  private List<CampaignMemberEntity> campaignMembers = new ArrayList<>();
+  private List<CampaignMemberEntity> campaignList = new ArrayList<>();
   
   @Builder.Default
   @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
   @Schema(description = "세션 참여 기록")
-  private List<SessionPlayerEntity> sessionParticipations = new ArrayList<>();
+  private List<SessionPlayerEntity> sessionList = new ArrayList<>();
   
   @Builder.Default
   @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)

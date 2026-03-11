@@ -32,40 +32,40 @@ import java.util.List;
 )
 @SQLRestriction(value = "delete_yn = 'N'")
 public class CharacterEntity extends CommonEntity {
-
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_characters_users"))
   @Schema(description = "소유자 유저 정보")
   private UserEntity user;
-
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "campaign_id", nullable = true, foreignKey = @ForeignKey(name = "fk_characters_campaigns"))
   @Schema(description = "소속 캠페인 정보 (없을 수 있음)")
   private CampaignEntity campaign;
-
+  
   @Column(nullable = false, length = 50)
   @Schema(description = "캐릭터 이름", example = "가츠")
   private String name;
-
+  
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
   @Schema(description = "캐릭터 상태", example = "ACTIVE")
   private CHARACTER_STATUS status;
-
+  
   @Column(nullable = false, length = 30)
   @Schema(description = "종족", example = "Human")
   private String race;
-
+  
   @Builder.Default
   @Column(nullable = false)
   @Schema(description = "시작 레벨", example = "0")
   private Integer startLevel = 0;
-
+  
   @Builder.Default
   @Column(nullable = false)
   @Schema(description = "시작 경험치", example = "0")
   private Integer startExp = 0;
-
+  
   @Embedded
   @AttributeOverrides({
     @AttributeOverride(name = "copper", column = @Column(name = "start_currency_cp")),
@@ -76,19 +76,19 @@ public class CharacterEntity extends CommonEntity {
   })
   @Schema(description = "시작 소지 자금")
   private CharacterCurrency startCurrency;
-
+  
   @Embedded
   @Schema(description = "장비 정보")
   private CharacterEquipment equipment;
-
+  
   @Embedded
   @Schema(description = "힘/민첩 제한 아이템 정보")
   private CharacterRequirementStrDex requirementStrDex;
-
+  
   @Embedded
   @Schema(description = "건강 제한 아이템 정보")
   private CharacterRequirementCon requirementCon;
-
+  
   @Builder.Default
   @ElementCollection
   @CollectionTable(
@@ -98,9 +98,9 @@ public class CharacterEntity extends CommonEntity {
   )
   @Schema(description = "클래스 정보 목록 (멀티클래스 지원)")
   private List<CharacterClass> classes = new ArrayList<>();
-
+  
   @Builder.Default
-  @OneToMany(mappedBy = "character", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  @OneToMany(mappedBy = "character", cascade = { CascadeType.PERSIST, CascadeType.MERGE }, orphanRemoval = true)
   @Schema(description = "세션 참여 기록")
-  private List<SessionPlayerEntity> sessionParticipations = new ArrayList<>();
+  private List<SessionPlayerEntity> sessionList = new ArrayList<>();
 }

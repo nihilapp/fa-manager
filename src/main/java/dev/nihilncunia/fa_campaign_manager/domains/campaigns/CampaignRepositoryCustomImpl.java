@@ -11,10 +11,10 @@ import dev.nihilncunia.fa_campaign_manager.domains.campaigns.dto.CampaignOutDto;
 
 /**
  * 캠페인 커스텀 리포지토리 구현체
- * 
+ * <p>
  * 1. CustomRepositorySupport: 공통적으로 사용하는 JPAQueryFactory와 페이징 처리 헬퍼 기능을 상속받습니다.
  * 2. JPAQueryFactory: QueryDSL을 사용하여 자바 코드로 쿼리를 작성할 수 있게 해주는 핵심 도구입니다.
- * 
+ * <p>
  * QueryDSL의 장점:
  * - 쿼리를 자바 코드로 작성하여 컴파일 시점에 문법 오류를 잡을 수 있습니다.
  * - 동적 쿼리(조건에 따른 쿼리 변경)를 매우 깔끔하게 작성할 수 있습니다.
